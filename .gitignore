@@ -1,0 +1,12 @@
+# TODO: SQLite change later
+*.db
+*.s3db
+*.sqlite3
+
+# Environments
+.env
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
