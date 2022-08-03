@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     # 3rd party libraries
     "rest_framework",
     "rest_framework.authtoken",
+    "rest_framework_swagger",
 ]
 
 MIDDLEWARE = [
