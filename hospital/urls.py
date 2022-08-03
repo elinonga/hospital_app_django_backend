@@ -4,7 +4,6 @@ from rest_framework.authtoken import views
 
 # Swagger
 from django.conf.urls import url
-from rest_framework_swagger.views import get_swagger_view
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -24,6 +23,8 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # Auth
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('api-token-auth/', views.obtain_auth_token, name='api-token-auth'),
 
