@@ -69,14 +69,6 @@ INSTALLED_APPS = [
     "dj_rest_auth.registration",  # API endpoints for RESTful registration
 ]
 
-AUTHENTICATION_BACKENDS = [
-    # AxesBackend should be the first backend in the AUTHENTICATION_BACKENDS list.
-    "axes.backends.AxesBackend",
-    # Django ModelBackend is the default authentication backend.
-    "django.contrib.auth.backends.ModelBackend",
-    "guardian.backends.ObjectPermissionBackend",
-]
-
 SITE_ID = 1  # https://stackoverflow.com/questions/25468676/django-sites-model-what-is-and-why-is-site-id-1
 
 # Provider specific settings
