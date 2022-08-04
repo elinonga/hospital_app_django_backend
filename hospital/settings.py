@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     # 3rd party libraries
     "rest_framework",
     "rest_framework.authtoken",
-    "rest_framework_swagger",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
@@ -69,13 +69,23 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# set up the authentication classes
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.BasicAuthentication",
+        # 'rest_framework.authentication.SessionAuthentication',
+        "rest_framework.authentication.TokenAuthentication",
+        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
     ),
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    # "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    # "PAGE_SIZE": 10,
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
     ],
+    "DEFAULT_THROTTLE_RATES": {"anon": "100/hour", "user": "1000/hour"},
 }
 
 ROOT_URLCONF = 'hospital.urls'

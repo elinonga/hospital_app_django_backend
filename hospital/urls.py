@@ -3,7 +3,6 @@ from django.urls import path, include
 from rest_framework.authtoken import views
 
 # Swagger
-from django.conf.urls import url
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -25,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # Auth
-    path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('accounts/', include('hospital.accounts.urls', namespace='accounts')),
     path('api-token-auth/', views.obtain_auth_token, name='api-token-auth'),
 
     # Swagger
