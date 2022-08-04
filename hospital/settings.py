@@ -57,6 +57,16 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "drf_yasg",
+
+    ## - Authentication
+    # All-in-one authentication
+    "dj_rest_auth",
+    "allauth",  # Social authentication
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.facebook",
+    "allauth.socialaccount.providers.google",
+    "dj_rest_auth.registration",  # API endpoints for RESTful registration
 ]
 
 MIDDLEWARE = [
