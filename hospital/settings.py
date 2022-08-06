@@ -48,6 +48,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    #new
+    "django.contrib.sites",
+
     # Local
     'hospital.accounts',
     'hospital.appointments',
@@ -113,6 +116,12 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_THROTTLE_RATES": {"anon": "100/hour", "user": "1000/hour"},
 }
+
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = (
+    "auth-access-token"  # Name of the cookie to be used for JWT authentication
+)
+JWT_AUTH_REFRESH_COOKIE = "auth-refresh-token"
 
 ROOT_URLCONF = 'hospital.urls'
 
