@@ -24,8 +24,16 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
+ON_SERVER = env("ON_SERVER", default=True)
 
-ALLOWED_HOSTS = []
+# TODO: remove this when we are ready to deploy
+ALLOWED_HOSTS = ["*"]
+
+CORS_ALLOW_CREDENTIALS = True
+if ON_SERVER:
+    CORS_ORIGIN_REGEX_WHITELIST = env.list("CORS_ORIGIN_REGEX_WHITELIST", default=[])
+else:
+    CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Application definition
@@ -49,7 +57,8 @@ INSTALLED_APPS = [
     # 3rd party libraries
     "rest_framework",
     "rest_framework.authtoken",
-    "drf_yasg",
+    "corsheaders",  # Allow cross-origin requests
+    "drf_yasg", # Api documentation
 
     ## - Authentication
     # All-in-one authentication
@@ -79,6 +88,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -87,6 +97,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True  # only for dev environment!, this should be changed before you push to production
 
 # set up the authentication classes
 REST_FRAMEWORK = {
