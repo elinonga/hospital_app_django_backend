@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.authtoken import views
-from hospital.accounts.views import GoogleLogin
 
 # Swagger
 from drf_yasg.views import get_schema_view
@@ -22,16 +21,14 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path("", include("django.contrib.auth.urls")),
     path('admin/', admin.site.urls),
 
     # Auth
-    path('accounts/', include('hospital.accounts.urls', namespace='accounts')),
-    path('api-token-auth/', views.obtain_auth_token, name='api-token-auth'),
-
-    # dj-rest-auth
-    path('api/auth/', include('dj_rest_auth.urls')),
-    path('registration/', include('dj_rest_auth.registration.urls')),
-    path('api/auth/google/', GoogleLogin.as_view(), name='google_login'), # Google
+    path("api/v1/", include("hospital.accounts.urls")),
+    path("api-auth/", include("rest_framework.urls")),
+    path('api/v1/auth/', include('dj_rest_auth.urls')),
+    path('api/v1/auth/register/', include('dj_rest_auth.registration.urls')),
 
     # Swagger
     path(

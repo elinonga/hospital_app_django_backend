@@ -71,6 +71,17 @@ INSTALLED_APPS = [
     "dj_rest_auth.registration",  # API endpoints for RESTful registration
 ]
 
+AUTH_USER_MODEL = "accounts.CustomUser"
+
+REST_AUTH_SERIALIZERS = {
+    "USER_DETAILS_SERIALIZER": "hospital.accounts.serializers.CustomUserSerializer",
+    "PASSWORD_RESET_SERIALIZER": "hospital.accounts.serializers.CustomPasswordResetSerializer",
+}
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    "REGISTER_SERIALIZER": "hospital.accounts.serializers.UserRegisterSerializer"
+}
+
 SITE_ID = 1  # https://stackoverflow.com/questions/25468676/django-sites-model-what-is-and-why-is-site-id-1
 
 # Provider specific settings
@@ -200,6 +211,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+OLD_PASSWORD_FIELD_ENABLED = True
 
 # EMAIL CONFIGURATIONS SENDGRID
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

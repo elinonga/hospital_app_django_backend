@@ -1,52 +1,53 @@
-from .serializers import UserSerializer
+from .models import CustomUser, Profile
+from .serializers import CustomUserSerializer, UserProfileSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics, permissions
 from rest_framework.permissions import IsAdminUser
 from django.contrib.auth.models import User
 
-
-# For Google Login
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-from dj_rest_auth.registration.views import SocialLoginView
+from .permissions import IsOwner
 
 
-class UserRecordView(APIView):
+class UserProfileDetailView(generics.RetrieveAPIView):
+    """[summary]
+    User can view his profile information.
+
+    [restrictions]
+    Only super user and owner can view the profile information.
+    Later(Allow member of the company to view the profile information of another member)
+
     """
-        API View to create or get a list of all the registered
-        users. GET request returns the registered users whereas
-        a POST request allows to create a new user.
+
+    permission_classes = (IsOwner,)
+    serializer_class = UserProfileSerializer
+    queryset = Profile.objects.all()
+
+
+class UserProfileCreateView(generics.CreateAPIView):
+    """[summary]
+    - Create user profile 
     """
-    permission_classes = [IsAdminUser]
 
-    def get(self, format=None):
-        users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data)
+    queryset = CustomUser.objects.all()
+    serializer_class = UserProfileSerializer
 
-    def post(self, request):
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=ValueError):
-            serializer.create(validated_data=request.data)
-            return Response(
-                serializer.data,
-                status=status.HTTP_201_CREATED
-            )
-        return Response(
-            {
-                "error": True,
-                "error_msg": serializer.error_messages,
-            },
-            status=status.HTTP_400_BAD_REQUEST
-        )
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
-""" For Google Login"""
-class GoogleLogin(SocialLoginView): # if you want to use Authorization Code Grant, use this
-    adapter_class = GoogleOAuth2Adapter
-    callback_url = "http://localhost:3000"  # frontend application url
-    client_class = OAuth2Client
+class UserProfileUpdateView(generics.UpdateAPIView):
+    """
+    [summary]
+    - Update user profile information
 
-class GoogleLogin(SocialLoginView): # if you want to use Implicit Grant, use this
-    adapter_class = GoogleOAuth2Adapter
+    [restrictions]:
+    - USER can't change profile information of another user.
+    """
+
+    permission_classes = (
+        permissions.IsAuthenticated,
+        IsOwner,
+    )
+    serializer_class = UserProfileSerializer
+    queryset = Profile.objects.all()
